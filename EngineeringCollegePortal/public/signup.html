@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PEC Portal - Signup</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <video autoplay muted loop id="bgVideo">
+    <source src="background.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+  <header id="portalHeader">
+    <div class="header-logo">PRAGATI </div>
+    <nav>
+      <a href="auth.html" class="nav-btn">Home</a>
+      <a href="login.html" class="nav-btn active-nav">Login/Signup</a>
+    </nav>
+  </header>
+
+  <section id="portalSection" class="content-section active-section">
+    <div class="container">
+      <h2>PRAGATI</h2>
+      <h3>Engineering College Portal Signup</h3>
+
+      <div class="toggle-buttons">
+        <a href="login.html">Login</a>
+        <a href="signup.html" class="active-btn">Signup</a>
+      </div>
+
+      <form id="signupForm" class="active-form">
+        <input type="email" id="signupEmail" name="email" placeholder="Email" required>
+        <input type="password" id="signupPassword" name="password" placeholder="Password" required>
+        
+        <select id="signupRole" name="role" required>
+          <option value="">Select Role</option>
+          <option value="student">Student</option>
+          <option value="parent">Parent</option>
+          <option value="teacher">Teacher</option>
+        </select>
+        
+        <div id="signupCaptcha" class="g-recaptcha" data-sitekey="6LcX4OIrAAAAAM0djWEoKC00ydVlvnhHqsH-pVGO"></div>
+        <button type="submit">Signup</button>
+      </form>
+    </div>
+  </section>
+
+  <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+  <script>
+    let signupCaptchaWidget;
+
+    function onRecaptchaLoad() {
+      signupCaptchaWidget = grecaptcha.render('signupCaptcha', {
+        'sitekey': '6LcX4OIrAAAAAM0djWEoKC00ydVlvnhHqsH-pVGO'
+      });
+    }
+
+    // --------- Signup handler (Updated for robustness) ---------
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const submitButton = e.submitter;
+      submitButton.disabled = true; // Disable button to prevent double submission
+      
+      // Core fields
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+      const role = document.getElementById("signupRole").value;
+      const token = grecaptcha.getResponse(signupCaptchaWidget);
+
+      if (!token) { 
+          alert("Please complete the captcha"); 
+          submitButton.disabled = false; // Re-enable if captcha is not filled
+          return; 
+      }
+      
+      // Exam and Rank are now permanently set to null (or skipped)
+      const exam = null; 
+      const rank = null;
+
+      try {
+          const res = await fetch("http://localhost:5000/signup", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ 
+                  email, 
+                  password, 
+                  role, 
+                  exam, // Sending null values
+                  rank, // Sending null values
+                  "g-recaptcha-response": token 
+              })
+          });
+          
+          const data = await res.json();
+          alert(data.message || data.error);
+          
+          if (data.message === "Signup successful!") {
+              window.location.href = 'login.html'; 
+          }
+      } catch (err) {
+          alert("An unexpected network error occurred.");
+      } finally {
+          grecaptcha.reset(signupCaptchaWidget); // Reset the captcha for next attempt
+          submitButton.disabled = false; // Re-enable the button
+      }
+    });
+  </script>
+</body>
+</html>

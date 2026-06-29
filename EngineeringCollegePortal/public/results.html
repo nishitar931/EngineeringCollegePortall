@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Results</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <video autoplay muted loop id="bg-video">
+    <source src="background.mp4" type="video/mp4">
+  </video>
+
+  <div class="results-container">
+    <h1>Available Colleges</h1>
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>College Name</th>
+          <th>Course</th>
+          <th>Closing Rank</th>
+          <th>Round</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Extract query parameters (rank & round)
+    const params = new URLSearchParams(window.location.search);
+    const rank = params.get("rank");
+    const round = params.get("round");
+
+    // Fetch college data
+    fetch(`/colleges/by-rank?rank=${rank}&round=${round}`)
+      .then(res => res.json())
+      .then(data => {
+        const tableBody = document.querySelector("#resultsTable tbody");
+        if (data.length === 0) {
+          tableBody.innerHTML = "<tr><td colspan='4'>No colleges found</td></tr>";
+        } else {
+          data.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${row.college_name}</td>
+              <td>${row.branch}</td>
+              <td>${row.closing_rank}</td>
+              <td>${row.round}</td>
+            `;
+            tableBody.appendChild(tr);
+          });
+        }
+      })
+      .catch(err => {
+        console.error("Error fetching data:", err);
+      });
+  </script>
+</body>
+</html>

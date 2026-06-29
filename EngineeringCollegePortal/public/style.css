@@ -1,0 +1,259 @@
+/* --- Global Body & Background Video Styles --- */
+body {
+    /* Reset margins for full coverage of background video */
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Adjusted font for better readability */
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+}
+
+#bgVideo {
+    /* Positioning and Size for Full Background Coverage */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -101; /* Extra low z-index */
+}
+
+/* --- Header Styles for Navigation --- */
+#portalHeader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 5%;
+    background: rgba(0, 0, 0, 0.85); /* Slightly darker background for better contrast */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.header-logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Base style for navigation buttons/links */
+.nav-btn,
+.btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    font-weight: normal;
+}
+
+.nav-btn {
+    margin-left: 10px;
+}
+
+.nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-btn.active-nav {
+    background-color: #007bff; /* Primary accent color */
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* --- Content Section Positioning --- */
+.content-section {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    z-index: 5;
+    /* Transition and pointer-events removed here as it's static content on separate pages */
+}
+
+.active-section {
+    /* Style for the main content block */
+    display: block;
+}
+
+/* --- Home Page Specific Styles (Centered Text) --- */
+#homeSection {
+    max-width: 800px;
+    text-align: center;
+    padding: 60px;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+}
+
+.home-content h1 {
+    font-size: 3em;
+    margin-bottom: 25px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.home-content p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+/* --- Portal Section (Login/Signup Form) Styles --- */
+#portalSection {
+    max-width: 400px;
+}
+
+#portalSection .container {
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.98); /* Near-white background */
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    color: #333; /* Dark text for contrast */
+    text-align: center;
+}
+
+#portalSection h2 {
+    color: #007bff;
+    margin-bottom: 5px;
+    font-size: 2.2em;
+}
+
+#portalSection h3 {
+    color: #555;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    font-weight: normal;
+}
+
+/* --- Form Toggle Buttons (Login/Signup) --- */
+.toggle-buttons {
+    display: flex;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-buttons a {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background-color: #f0f4f7;
+    color: #555;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 1.05em;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.toggle-buttons a:hover:not(.active-btn) {
+    background-color: #e0e6eb;
+}
+
+.toggle-buttons .active-btn {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+/* --- Form Styling --- */
+#loginForm,
+#signupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Form Inputs and Selects */
+#portalSection input[type="email"],
+#portalSection input[type="password"],
+#portalSection input[type="number"],
+#portalSection select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    width: 100%;
+    max-width: 350px;
+    box-sizing: border-box;
+}
+
+/* Rank Field Toggling */
+#rankField {
+    width: 100%;
+    max-width: 350px;
+}
+
+/* Form Submit Button */
+#portalSection button[type="submit"] {
+    background-color: #28a745; /* Success Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+    max-width: 300px;
+}
+
+#portalSection button[type="submit"]:hover {
+    background-color: #1e7e34;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Captcha Styling (for alignment) */
+.g-recaptcha {
+    margin: 5px auto;
+    transform: scale(0.9);
+    transform-origin: 0 0;
+    max-width: 300px;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+    #portalHeader {
+        padding: 15px 10px;
+        flex-direction: column;
+    }
+    #portalHeader nav {
+        margin-top: 10px;
+    }
+    .header-logo {
+        font-size: 1.2em;
+    }
+    #homeSection {
+        padding: 40px 20px;
+    }
+    .home-content h1 {
+        font-size: 2em;
+    }
+    #portalSection .container {
+        padding: 20px;
+    }
+}

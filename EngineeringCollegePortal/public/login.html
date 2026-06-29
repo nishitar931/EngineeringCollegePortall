@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PEC Portal - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <video autoplay muted loop id="bgVideo">
+    <source src="background.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+  <header id="portalHeader">
+    <div class="header-logo">PRAGATI </div>
+    <nav>
+      <a href="auth.html" class="nav-btn">Home</a>
+      <a href="login.html" class="nav-btn active-nav">Login/Signup</a>
+    </nav>
+  </header>
+
+  <section id="portalSection" class="content-section active-section">
+    <div class="container">
+      <h2>PRAGATI</h2>
+      <h3>Engineering College Portal Login</h3>
+
+      <div class="toggle-buttons">
+        <a href="login.html" class="active-btn">Login</a>
+        <a href="signup.html">Signup</a>
+      </div>
+
+      <form id="loginForm" class="active-form">
+        <input type="email" id="loginEmail" name="email" placeholder="Email" required>
+        <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+        
+        <select id="loginRole" name="role" required>
+          <option value="">Select Role</option>
+          <option value="student">Student</option>
+          <option value="parent">Parent</option>
+          <option value="teacher">Teacher</option>
+        </select>
+        
+        <select id="loginExam" name="exam" required>
+          <option value="">Select Exam Type</option>
+          <option value="kcet">KCET</option>
+          <option value="comedk">COMEDK</option> 
+          <option value="private_exam">Private College Entrance Exam</option> 
+        </select>
+        
+        <div id="loginCaptcha" class="g-recaptcha" data-sitekey="6LcX4OIrAAAAAM0djWEoKC00ydVlvnhHqsH-pVGO"></div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </section>
+
+  <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+  <script>
+    let loginCaptchaWidget;
+    const RECAPTCHA_SITE_KEY = '6LcX4OIrAAAAAM0djWEoKC00ydVlvnhHqsH-pVGO';
+
+    function onRecaptchaLoad() {
+      loginCaptchaWidget = grecaptcha.render('loginCaptcha', {
+        'sitekey': RECAPTCHA_SITE_KEY
+      });
+    }
+
+    // --------- Login handler (Updated for robustness) ---------
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const submitButton = e.submitter;
+      submitButton.disabled = true; // Disable button to prevent double submission
+      
+      // Fetch values from the form
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      const role = document.getElementById("loginRole").value;
+      const exam = document.getElementById("loginExam").value; // Critical for redirection
+      const token = grecaptcha.getResponse(loginCaptchaWidget);
+
+      if (!token) { 
+        alert("Please complete the captcha"); 
+        submitButton.disabled = false; // Re-enable if captcha is not filled
+        return; 
+      }
+
+      try {
+          const res = await fetch("http://localhost:5000/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              
+              // Ensure 'exam' is sent in the body
+              body: JSON.stringify({ 
+                  email, 
+                  password, 
+                  role, 
+                  exam, 
+                  "g-recaptcha-response": token 
+              })
+          });
+          
+          const data = await res.json();
+          alert(data.message || data.error);
+          
+          // CRITICAL REDIRECTION STEP: Backend sends the correct URL in data.redirect
+          if (data.redirect) {
+              window.location.href = data.redirect;
+          }
+      } catch (err) {
+          alert("An unexpected network error occurred.");
+      } finally {
+          grecaptcha.reset(loginCaptchaWidget);
+          submitButton.disabled = false; // Re-enable the button
+      }
+    });
+  </script>
+</body>
+</html>

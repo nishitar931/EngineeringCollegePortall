@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>College Results</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <video autoplay muted loop id="bgVideo">
+        <source src="background.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+
+    <div class="results-container">
+        <h2>Eligible Colleges for Rank: <%= studentRank %></h2>
+        <% if (colleges.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>College Name</th>
+                        <th>Branch</th>
+                        <th>1G Cutoff</th>
+                        <th>2A Cutoff</th>
+                        <th>SCR Cutoff</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% colleges.forEach(college => { %>
+                        <tr>
+                            <td><%= college.college_name %></td>
+                            <td><%= college.branch %></td>
+                            <td><%= college["1g"] %></td>
+                            <td><%= college["2a"] %></td>
+                            <td><%= college.scr %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No colleges found for the given rank.</p>
+        <% } %>
+        <a href="/rank.html">Back to Search</a>
+    </div>
+</body>
+</html>
